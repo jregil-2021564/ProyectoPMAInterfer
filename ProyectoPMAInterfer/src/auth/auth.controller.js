@@ -7,7 +7,7 @@ import { asyncHandler } from '../../middlewares/error-handler.js';
 
 /**
  * POST /api/v1/auth/login
- * Inicio de sesión exclusivo solo para administradores
+ * Inicio de sesión exclusivo para administradores
  */
 export const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
