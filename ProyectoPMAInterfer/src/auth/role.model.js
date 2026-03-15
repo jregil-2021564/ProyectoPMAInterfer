@@ -19,7 +19,7 @@ export const Role = sequelize.define(
       unique: true,
       field: 'name',
       validate: {
-        notEmpty: { msg: 'El nombre del rol es obligatorio' },
+        notEmpty: { msg: 'El nombre del rol es obligatorio.' },
         isIn: {
           args: [ALLOWED_ROLES],
           msg: 'Rol no permitido. Use ADMIN_ROLE o USER_ROLE.',
