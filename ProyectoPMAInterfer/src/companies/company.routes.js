@@ -18,7 +18,7 @@ import { validateJWT } from '../../middlewares/validate-jwt.js';
 
 const router = Router();
 
-// Todos los endpoints de empresas requieren autenticación
+// Todos los endpoints de empresas requieren autenticaciónn
 router.use(validateJWT);
 
 /**
