@@ -3,7 +3,7 @@
 import { User } from '../users/user.model.js';
 import { Role, UserRole } from '../auth/role.model.js';
 
-// Email del admin protegido — nadie puede tocarle eeste rol
+// Email del admin protegido — nadie puede tocarle este rol
 const PROTECTED_ADMIN_EMAIL = 'jregil0re@gmail.com';
 
 /**
