@@ -12,7 +12,7 @@ import {
 
 const router = Router();
 
-// Todos los endpoints requieren JWT válido + rol ADMIN_ROLEe
+// Todos los endpoints requieren JWT válido + rol ADMIN_ROLE
 router.use(validateJWT, isAdmin);
 
 router.post('/assign', assignRole);         // Asignar rol a usuario
