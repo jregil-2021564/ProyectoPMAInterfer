@@ -5,41 +5,41 @@ import { IMPACT_LEVELS, COMPANY_CATEGORIES } from './company.model.js';
 
 export const createCompanyValidators = [
     body('companyName')
-        .notEmpty().withMessage('El nombre de la empresa es obligatorio')
+        .notEmpty().withMessage('El nombre de la empresa es obligatorio.')
         .trim()
-        .isLength({ max: 100 }).withMessage('El nombre no puede tener más de 100 caracteres'),
+        .isLength({ max: 100 }).withMessage('El nombre no puede tener más de 100 caracteres.'),
 
     body('businessName')
         .notEmpty().withMessage('La razón social es obligatoria')
         .trim()
-        .isLength({ max: 150 }).withMessage('La razón social no puede tener más de 150 caracteres'),
+        .isLength({ max: 150 }).withMessage('La razón social no puede tener más de 150 caracteres.'),
 
     body('description')
         .optional()
         .trim()
-        .isLength({ max: 500 }).withMessage('La descripción no puede tener más de 500 caracteres'),
+        .isLength({ max: 500 }).withMessage('La descripción no puede tener más de 500 caracteres.'),
 
     body('category')
-        .notEmpty().withMessage('La categoría empresarial es obligatoria')
+        .notEmpty().withMessage('La categoría empresarial es obligatoria.')
         .toUpperCase()
         .isIn(COMPANY_CATEGORIES)
         .withMessage(`La categoría debe ser una de: ${COMPANY_CATEGORIES.join(', ')}`),
 
     body('impactLevel')
-        .notEmpty().withMessage('El nivel de impacto es obligatorio')
+        .notEmpty().withMessage('El nivel de impacto es obligatorio.')
         .toUpperCase()
         .isIn(IMPACT_LEVELS)
         .withMessage(`El nivel de impacto debe ser uno de: ${IMPACT_LEVELS.join(', ')}`),
 
     body('yearsOfExperience')
-        .notEmpty().withMessage('Los años de trayectoria son obligatorios')
+        .notEmpty().withMessage('Los años de trayectoria son obligatorios.')
         .isInt({ min: 0, max: 200 })
-        .withMessage('Los años de trayectoria deben ser un entero entre 0 y 200')
+        .withMessage('Los años de trayectoria deben ser un entero entre 0 y 200.')
         .toInt(),
 
     body('contactEmail')
-        .notEmpty().withMessage('El email de contacto es obligatorio')
-        .isEmail().withMessage('El email de contacto no tiene un formato válido')
+        .notEmpty().withMessage('El email de contacto es obligatorio.')
+        .isEmail().withMessage('El email de contacto no tiene un formato válido.')
         .normalizeEmail(),
 
     body('contactPhone')
