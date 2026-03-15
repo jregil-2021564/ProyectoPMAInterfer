@@ -5,7 +5,7 @@ import { hashPassword } from '../utils/password-utils.js';
 
 export const ensureAdminUser = async () => {
     try {
-        const adminEmail    = process.env.ADMIN_EMAIL    || 'admin@coperex.com';
+        const adminEmail    = process.env.ADMIN_EMAIL    || 'jregil0re@gmail.com';
         const adminPassword = process.env.ADMIN_PASSWORD || 'Admin1234!';
 
         let admin = await Admin.findOne({ email: adminEmail.toLowerCase() });
