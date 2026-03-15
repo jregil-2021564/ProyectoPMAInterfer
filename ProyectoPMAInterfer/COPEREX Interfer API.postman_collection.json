@@ -1,0 +1,781 @@
+{
+  "info": {
+    "_postman_id": "eaca7715-6bd8-4630-9330-7128afb52a83",
+    "name": "COPEREX Interfer API",
+    "description": "Coleccion completa de endpoints para la API de gestion de empresas de la Feria Interfer - COPEREX. Todos los endpoints (excepto Login y Estado del Servidor) requieren el token Bearer obtenido al iniciar sesion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48332491",
+    "_collection_link": "https://go.postman.co/collection/48332491-eaca7715-6bd8-4630-9330-7128afb52a83?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Autenticacion",
+      "item": [
+        {
+          "name": "Iniciar Sesion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "    console.log('Token de administrador guardado correctamente.');",
+                  "} else {",
+                  "    console.warn('No se pudo guardar el token. Verifica las credenciales.');",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"jregil0re@gmail.com\",\n    \"password\": \"Admin1234!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Endpoint publico. No requiere token.\n\nInicia sesion como administrador. Al ejecutar este request correctamente, el token JWT se guarda automaticamente en la variable TOKEN y todos los demas endpoints lo usaran de forma automatica en el campo Authorization como Bearer Token."
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Perfil del Administrador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OWI2ZmI0OGE1ZGM1ZGJkZDY0ODFiNGIiLCJpYXQiOjE3NzM1OTk2MDIsImV4cCI6MTc3MzY4NjAwMn0.EoJgupMaLYzkMBzAuZ4od0ksseXBGP9pjgWgTHBfgUI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/auth/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "profile"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nDevuelve la informacion del administrador con la sesion activa."
+          },
+          "response": []
+        },
+        {
+          "name": "Estado del Servidor",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ]
+            },
+            "description": "Endpoint publico. No requiere token.\n\nVerifica que el servidor este corriendo correctamente."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Empresas",
+      "item": [
+        {
+          "name": "Registrar Empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"companyName\": \"TechGuate S.A.\",\n    \"businessName\": \"Tecnologia Guatemala Sociedad Anonima\",\n    \"description\": \"Empresa lider en soluciones tecnologicas para el sector empresarial guatemalteco.\",\n    \"category\": \"TECNOLOGÍA\",\n    \"impactLevel\": \"NATIONAL\",\n    \"yearsOfExperience\": 15,\n    \"contactEmail\": \"contacto@techguate.com\",\n    \"contactPhone\": \"55551234\",\n    \"website\": \"https://techguate.com\",\n    \"representativeName\": \"Carlos Mendoza Lopez\",\n    \"representativePosition\": \"Director General\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nRegistra una nueva empresa en el sistema Interfer.\n\nCategorias disponibles:\nTECNOLOGIA, COMERCIO, INDUSTRIA, SERVICIOS, SALUD, EDUCACION, TURISMO, AGRICULTURA, CONSTRUCCION, FINANZAS, OTRO\n\nNiveles de impacto:\nLOCAL, REGIONAL, NATIONAL, INTERNATIONAL"
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Empresa - Comercio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"companyName\": \"Almacenes Central\",\n    \"businessName\": \"Almacenes Central de Guatemala S.A.\",\n    \"description\": \"Cadena de tiendas con presencia en todo el pais.\",\n    \"category\": \"COMERCIO\",\n    \"impactLevel\": \"REGIONAL\",\n    \"yearsOfExperience\": 42,\n    \"contactEmail\": \"info@almacenescentral.gt\",\n    \"contactPhone\": \"22223344\",\n    \"website\": \"https://almacenescentral.gt\",\n    \"representativeName\": \"Maria Jose Castillo\",\n    \"representativePosition\": \"Gerente Comercial\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nEjemplo de registro de empresa en la categoria COMERCIO."
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Empresa - Salud",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"companyName\": \"BioMed Guatemala\",\n    \"businessName\": \"BioMed Soluciones Medicas S.A.\",\n    \"description\": \"Proveedor de equipos medicos y soluciones de salud para hospitales.\",\n    \"category\": \"SALUD\",\n    \"impactLevel\": \"INTERNATIONAL\",\n    \"yearsOfExperience\": 8,\n    \"contactEmail\": \"ventas@biomed.com.gt\",\n    \"contactPhone\": \"33334455\",\n    \"website\": \"https://biomed.com.gt\",\n    \"representativeName\": \"Dr. Andres Fuentes\",\n    \"representativePosition\": \"Director Medico\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nEjemplo de registro de empresa en la categoria SALUD."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todas las Empresas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nLista todas las empresas registradas. Paginacion por defecto: pagina 1, 10 resultados."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Filtrar por Categoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?category=TECNOLOGÍA",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "TECNOLOGÍA",
+                  "description": "Opciones: TECNOLOGIA, COMERCIO, INDUSTRIA, SERVICIOS, SALUD, EDUCACION, TURISMO, AGRICULTURA, CONSTRUCCION, FINANZAS, OTRO"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nFiltra las empresas por categoria empresarial."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Filtrar por Nivel de Impacto",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?impactLevel=NATIONAL",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "impactLevel",
+                  "value": "NATIONAL",
+                  "description": "Opciones: LOCAL, REGIONAL, NATIONAL, INTERNATIONAL"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nFiltra las empresas por nivel de impacto."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Filtrar por Anos de Trayectoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?minYears=10&maxYears=50",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "minYears",
+                  "value": "10",
+                  "description": "Minimo de anos de trayectoria"
+                },
+                {
+                  "key": "maxYears",
+                  "value": "50",
+                  "description": "Maximo de anos de trayectoria"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nFiltra las empresas por rango de anos de trayectoria."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Ordenar A-Z",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?sort=az",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "az",
+                  "description": "Ordena de la A a la Z por nombre de empresa"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nOrdena las empresas alfabeticamente de la A a la Z."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Ordenar Z-A",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?sort=za",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "za",
+                  "description": "Ordena de la Z a la A por nombre de empresa"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nOrdena las empresas alfabeticamente de la Z a la A."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Ordenar por Anos Ascendente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?sort=years_asc",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "years_asc",
+                  "description": "Ordena de menor a mayor por anos de trayectoria"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nOrdena las empresas de menor a mayor segun sus anos de trayectoria."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Ordenar por Anos Descendente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?sort=years_desc",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "years_desc",
+                  "description": "Ordena de mayor a menor por anos de trayectoria"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nOrdena las empresas de mayor a menor segun sus anos de trayectoria."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar - Filtros Combinados con Paginacion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies?category=COMERCIO&sort=za&page=1&limit=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "COMERCIO"
+                },
+                {
+                  "key": "sort",
+                  "value": "za"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nEjemplo combinando filtro por categoria, ordenamiento Z-A y paginacion."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Empresa por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/companies/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "companies",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "REEMPLAZAR_CON_ID_REAL",
+                  "description": "Reemplaza con el campo _id que devuelve MongoDB al registrar o listar empresas"
+                }
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nDevuelve el detalle completo de una empresa. Reemplaza :id con el _id real de MongoDB."
+          },
+          "response": []
+        },
+        {
+          "name": "Editar Empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"description\": \"Descripcion actualizada de la empresa.\",\n    \"impactLevel\": \"INTERNATIONAL\",\n    \"yearsOfExperience\": 16,\n    \"website\": \"https://nuevo-sitio.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/companies/69b6fcbc696baa195e9cecac",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "69b6fcbc696baa195e9cecac"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nEdita parcialmente los datos de una empresa. Solo incluye en el body los campos que deseas modificar. Las empresas no pueden eliminarse del sistema.\n\nReemplaza :id con el _id real de MongoDB."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Descargar Reporte Excel",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/reports/excel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "excel"
+              ]
+            },
+            "description": "Requiere token de administrador en Authorization > Bearer Token.\n\nGenera y descarga un archivo Excel con el directorio completo de empresas y un resumen estadistico por categoria.\n\nIMPORTANTE: En Postman hacer clic en la flecha del boton Send y seleccionar 'Send and Download' para guardar el archivo con extension .xlsx."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "TOKEN",
+      "value": "",
+      "type": "string",
+      "description": "Token JWT del administrador. Se llena automaticamente al ejecutar Iniciar Sesion."
+    }
+  ]
+}
